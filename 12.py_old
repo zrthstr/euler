@@ -1,0 +1,122 @@
+#!/usr/bin/env python2
+
+"""
+What is the value of the first triangle number to have over five hundred divisors?
+"""
+
+import time
+import sys
+from collections import OrderedDict
+
+
+primes = [2]
+
+def populate_primes(limit):
+    global primes
+    for n in range(3,limit):
+        for p in primes:
+            if not n % p:
+                break
+        else:
+            primes.append(n)
+    
+
+def is_prime(n):
+    global primes
+    if n > max(primes):
+        print "primes generated to low! ERROR"
+        sys.exit()
+    if n in primes: return True
+    else: return False
+
+
+
+def smallest_prime(cur):
+    global primes
+    for p in primes:
+        if p > cur:
+#            print cur
+            return cur
+        if not cur % p:
+#            print p
+            return p
+    print cur, p
+    print "this should never happen"
+    sys.exit(1)
+
+
+# returns prime facters of and int
+def prime_facter(cur):
+    found = []
+    while not is_prime(cur):
+        smallest = smallest_prime(cur)
+        cur = cur / smallest
+        found.append(smallest)
+    found.append(cur)
+
+    return list(OrderedDict.fromkeys(found))
+
+
+# finde one more facter
+def next_facter(prime_facters):
+    maximum = max(prime_facters)
+    for x in prime_facters:
+    #    print "..........."
+        for y in prime_facters:
+            xy = x * y
+            if xy < maximum:
+                if xy not in prime_facters:
+                    if not maximum % xy :
+                        prime_facters.append(xy)
+  
+    return prime_facters
+
+
+# find the other facters by multiplying prime facters
+def search_other_facters(prime_facters):
+    old_count= 0 # len(prime_facters)
+#    print "XXXX1" 
+    while old_count != len(prime_facters):
+#        print "XXXXX2"
+        old_count = len(prime_facters)
+        prime_facters = next_facter(prime_facters)
+        
+    return prime_facters
+
+
+
+populate_primes(10000000)
+print primes
+
+print "primes_computed"
+
+facter_reccord = facter_count = 0
+triangle_cur = 3
+triangle_count = 3
+
+while True:
+
+    prime_facters = prime_facter(triangle_cur)
+    prime_facters.append(triangle_cur)
+    all_facters = search_other_facters(prime_facters)
+    facter_count = len(all_facters)
+
+    # debug info    
+    print "tested: %d, facter_count: %d" %(triangle_cur, facter_count) 
+    print prime_facters
+    print all_facters
+
+
+    if facter_count > facter_reccord:
+        facter_reccord = facter_count
+        print "New reccord! ", facter_reccord
+
+        if facter_count > 500:
+            print "Got it!\n %d has %d facters" %(triangle_cur, facter_count)
+            break
+
+
+    triangle_cur += triangle_count
+    triangle_count += 1
+
+
