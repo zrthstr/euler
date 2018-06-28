@@ -21,6 +21,8 @@ def prime_gen():
 
 
 def primes_to(maxi):
+    maxi = int(maxi)
+
     if maxi <= 2:
         return []
     if maxi == 2:
@@ -55,6 +57,7 @@ def factors(i):
             if i % test == 0: 
                 i //= test
                 factors.append(test)
+                # set min to test..
                 break
     factors.append(i)
     return factors
