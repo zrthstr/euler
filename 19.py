@@ -17,6 +17,20 @@ How many Sundays fell on the first of the month during the twentieth century (1 
 
 
 ### the smart solution is to do print(1200/7) ## ==>> 171 ...
+### 
+### or
+###
+
+import datetime
+count = 0
+for y in range(1901,2001):
+    for m in range(1,13):
+        if datetime.datetime(y,m,1).weekday() == 6:
+            count += 1
+print(count)
+
+
+
 
 """
 
