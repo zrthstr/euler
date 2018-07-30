@@ -14,6 +14,8 @@ By solving all fifty puzzles find the sum of the 3-digit numbers found in the to
 
 """
 
+import random
+import copy
 
 def load(filename):
     """ loads sudoku game files.
@@ -50,14 +52,15 @@ def load(filename):
 
 def validate_lines(game):
     test = [[] for e in range(9)]
+    if not isinstance(game, list):
+        raise ValueError('Validate lines failed. "Game" type must be list is:%s. Should be list of lists' % type(game))
 
     for y, line in enumerate(game):
         for sq in line:
-            if sq == set():
-                raise ValueError('Some problem00, empty set found.. y: %d, sq: %s' %(y, sq))
+            if not isinstance(line, list):
+                raise ValueError('Validation lines failed, game[x] should be list type')
             if len(sq) == 1:
                 test[y].append(next(iter(sq)))
-
 
     for y, t in enumerate(test):
         if not len(t) == len(set(t)):
@@ -88,22 +91,6 @@ def validate_game(game):
     #print("bars ok..")
     validate_sq(game)
     #print("Sqs ok..")
-
-
-state = 0
-
-def has_changed(game):
-    global state
-    leng = 0
-    for line in game:
-        for l in line:
-            leng += len(l)
-    if state == leng:
-        return False
-    else:
-        state = leng
-        return True
-
 
 
 def reflect(game):
@@ -198,13 +185,16 @@ def solve_sq2(game):
     return game
 
 
-
-def is_solved(game):
+def count_unsolved(game):
+    """ returns True if game is solved,
+        returns number of possible variables needed to be ruled out,
+        if game is not solved
+    """
+    variables = -1 * 9 * 9
     for line in game:
         for l in line:
-            if len(l) > 1:
-                return False
-    return True
+            variables += len(l)
+    return variables
 
 
 def prepare(game):
@@ -220,6 +210,8 @@ def prepare(game):
 
 
 def show(game):
+    #validate_lines(game)
+    validate_game(game)
     print("_")
     for line in game:
         for sq in line:
@@ -228,7 +220,7 @@ def show(game):
 
 
 def solve_by_logic(g):
-    validate_game(g)
+    ## validate_game(g)
     g = solve_lines(g)
     g = reflect(solve_lines(reflect(g)))
     g = solve_fileds(g)
@@ -239,17 +231,67 @@ def solve_by_logic(g):
     return g
 
 
-def mutate(game, x):
-    print("DEBUG mutating: ", x)
+def mutate(game, mut):
+    print("DEBUG in mutate:")
+    print("DEBUG: applieing mut: %d on game:%s" %(mut, game))
+
     for y, line in enumerate(game):
         for x, sq in enumerate(line):
-            if len(sq) > 1:
-                x -= 1
-                if x == 0:
-                    game[y][x].pop()
-                    return game
+            if len(sq) == 1:
+                continue
+            mut -= len(sq)
+            if mut < 1:
+                mut *= -1
 
-    #return game
+                print("DEBUG: mutating game[y][x] with mut (%s,%d)" %(game[y][x], mut))
+                new = list(game[y][x])
+                new.sort()
+                print("DEBUG: new:", new)
+                del(new[mut])
+                game[y][x] = set(new)
+
+    
+                return game
+
+
+
+def solve(game):
+    c_unsolved = count_unsolved(game)
+    failed_mutation = 0
+
+    while count_unsolved(game) > 0:
+        show(game)
+
+        print("DEBUG: SWL, c_unsolved: %d , failed_mutations: %d" %(c_unsolved, failed_mutation))
+        game = solve_by_logic(game)
+        new_c_unsolved = count_unsolved(game)
+
+        if c_unsolved == new_c_unsolved:
+            ### if we get here we need to start guessing...
+            print("DEBUG, game has not changed. Solving by brute force..")
+            print("DEBUG, creating deep copy")
+            gc = copy.deepcopy(game)
+
+            failed_mutation += 1
+            gc = mutate(gc,failed_mutation)
+
+            gc = solve_by_logic(gc)
+            
+            try:
+                validate_game(gc)
+            except:
+                print("DEBUG: CCCCAAAAUUGHTTTT")
+
+            gc = solve(gc)
+
+            #gc = random_mutate(gc)
+            
+
+
+        c_unsolved = new_c_unsolved
+
+    return game
+
 
 def main():
     """ games are represented as list of list of sets.
@@ -257,39 +299,31 @@ def main():
         if the field is not know yet it is either 0 or 1-9
     """
 
-    solution = 0
+    global state
+
+    #solution = 0
     solved_count = 0
     filename = "p096_sudoku.txt"
     games = load(filename)
 
     ## testing
-    del(games[0:6])
-    del(games[1:]) 
+    #del(games[0:6])
+    #del(games[1:]) 
 
     for c, g in enumerate(games):
         print("playing game %d" % c)
-        rounds = 0
+        #mutations = []
+
         g = prepare(g)    
-        mutations = []
-
-        while not is_solved(g):
-            rounds += 1
-            g = solve_by_logic(g)
-
-            if not has_changed(g):
-                ### we give up for now.. next.
-                #solved_count -= 1
-                
-                
-                break
+        g = solve(g)
+        print("XXXX",g)
+        print("DEBUG: done with solving: %d"% c)
+        show(g)
 
 
 
-        #print("Rounds played: %d" % rounds)
-        solved_count += 1
-        print("Games solved: %d" % solved_count)
- 
-    print("Solution = %d" % solution)
+    #print("Game solved: %d" % c)
+    #print("Solution = %d" % solution)
 
 
 if __name__ == '__main__':

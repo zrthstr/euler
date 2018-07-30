@@ -1,44 +1,22 @@
 #!/usr/bin/env python3
 
+""" calculate the combinationbs that 200p can be combined with """
+
 
 # 1p, 2p, 5p, 10p, 20p, 50p, £1 (100p) and £2 (200p).
 
-coins = dict()
-coins = {
-        "1":0,
-        "2":0,
-        "5":0,
-        "10":0,
-        "20":0,
-        "50":0,
-        "100":0,
-        "200":0
-        }
+### solution ..
+### 2 x the amount of combinations as for 100p
+###
 
 
-t_coins = {
-        "1":200,
-        "2":100,
-        "5":40,
-        "10":20,
-        "20":10,
-        "50":4,
-        "100":2,
-        "200":1
-        }
+## 100 = a*1 + b*2 + c*5 + d*10 + e*20 + f*50 + g*100 
 
-def coint_reset():
-    t_coins = coins
+ 
 
-def coin_summ(coins):
-    s = 0
-    for k,v in coins.items():
-        s+= int(k) * v
-    return 0
+def main():
+    print("foo")
 
 
-cs = coin_summ(coins)
-print (cs)
-
-
-
+if __name__ == "__main__":
+    main()
