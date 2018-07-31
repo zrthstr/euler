@@ -1,7 +1,14 @@
-#!/usr/bin/env python
+#!/usr/bin/env  python3
+
+"""
+
+"""
 
 
-for e in range(2,1001):
-    print float(1) / e,
-    print e
+def main():
+    solution = 0
+    print("Solution = %d" % solution)
 
+
+if __name__ == '__main__':
+    main()
