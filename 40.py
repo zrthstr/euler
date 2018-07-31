@@ -26,7 +26,8 @@ def main():
         d += str(s)
     
      
-    for e in range(0,8):
+    #for e in range(0,8):
+    for e in range(0,7):
         print("d[%d] = %s" %(10**e  ,d[10**e]))
         solution *= int(d[10**e])
 
