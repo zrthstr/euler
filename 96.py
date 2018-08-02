@@ -64,7 +64,14 @@ def validate_lines(game):
 
     for y, t in enumerate(test):
         if not len(t) == len(set(t)):
-            raise ValueError('Two same numbers in line:', y)
+            # find double accuring entry
+            multi = []
+            #print("TTT", t)
+            for tt in t:
+                if t.count(tt) == 2:
+                    multi.append(tt)
+            #show(game)
+            raise ValueError('Two same numbers "%s" in line: %d' %(multi, y))
 
 
 def validate_sq(game):
@@ -119,7 +126,7 @@ def solve_lines(game):
     return game
 
 
-def solve_fileds(game):
+def solve_sq(game):
     present = [[set() for x in range(3) ] for y in range(3)]
 
     for y, line in enumerate(game):
@@ -210,8 +217,10 @@ def prepare(game):
 
 
 def show(game):
+    #if game == None:
+    #    return
     #validate_lines(game)
-    validate_game(game)
+    #validate_game(game)
     print("_")
     for line in game:
         for sq in line:
@@ -223,7 +232,8 @@ def solve_by_logic(g):
     ## validate_game(g)
     g = solve_lines(g)
     g = reflect(solve_lines(reflect(g)))
-    g = solve_fileds(g)
+    g = solve_sq(g)
+
     g = solve_lines2(g)
     g = reflect(solve_lines2(reflect(g)))
     g = solve_sq2(g)
@@ -232,8 +242,8 @@ def solve_by_logic(g):
 
 
 def mutate(game, mut):
-    print("DEBUG in mutate:")
-    print("DEBUG: applieing mut: %d on game:%s" %(mut, game))
+    #print("DEBUG in mutate:")
+    #print("DEBUG: applieing mut: %d on game:%s" %(mut, game))
 
     for y, line in enumerate(game):
         for x, sq in enumerate(line):
@@ -243,10 +253,10 @@ def mutate(game, mut):
             if mut < 1:
                 mut *= -1
 
-                print("DEBUG: mutating game[y][x] with mut (%s,%d)" %(game[y][x], mut))
+                #print("DEBUG: mutating game[y][x] with mut (%s,%d)" %(game[y][x], mut))
                 new = list(game[y][x])
                 new.sort()
-                print("DEBUG: new:", new)
+                #print("DEBUG: new:", new)
                 del(new[mut])
                 game[y][x] = set(new)
 
@@ -254,76 +264,91 @@ def mutate(game, mut):
                 return game
 
 
+def count_first_choice(game):
+    for line in game:
+        for sq in line:
+            if len(sq) > 1:
+                return len(sq)
+    ### false implies no choice..
+    return False
 
-def solve(game):
+
+def solve_by_logic_loop(c,game):
+    global solved_games
     c_unsolved = count_unsolved(game)
-    failed_mutation = 0
-
-    while count_unsolved(game) > 0:
-        show(game)
-
-        print("DEBUG: SWL, c_unsolved: %d , failed_mutations: %d" %(c_unsolved, failed_mutation))
+    while True:
         game = solve_by_logic(game)
+        validate_game(game)
         new_c_unsolved = count_unsolved(game)
-
+        if new_c_unsolved == 0:
+            solved_games[c] = game
+            return game
         if c_unsolved == new_c_unsolved:
-            ### if we get here we need to start guessing...
-            print("DEBUG, game has not changed. Solving by brute force..")
-            print("DEBUG, creating deep copy")
-            gc = copy.deepcopy(game)
-
-            failed_mutation += 1
-            gc = mutate(gc,failed_mutation)
-
-            gc = solve_by_logic(gc)
-            
-            try:
-                validate_game(gc)
-            except:
-                print("DEBUG: CCCCAAAAUUGHTTTT")
-
-            gc = solve(gc)
-
-            #gc = random_mutate(gc)
-            
-
-
+            break
         c_unsolved = new_c_unsolved
 
     return game
 
+def solve(c ,game):
+    global solved_games
+
+    try:
+        game =  solve_by_logic_loop(c, game)
+    except:
+        return
+
+    print("DEBUG, game has not changed. Solving by brute force..")
+    
+    for case in range(1, count_first_choice(game)+1):
+        game_c = copy.deepcopy(game)
+        game_c = mutate(game_c, case)
+        #return solve(c, game_c)
+        solve(c, game_c)
+      
+   # return game
+
+
+
+solved_games = [x for x in range(50)]
 
 def main():
     """ games are represented as list of list of sets.
         if the fieled is know it is a set with one element
         if the field is not know yet it is either 0 or 1-9
     """
+    global solved_games
 
-    global state
-
-    #solution = 0
+    solution = 0
     solved_count = 0
+
     filename = "p096_sudoku.txt"
     games = load(filename)
 
-    ## testing
-    #del(games[0:6])
-    #del(games[1:]) 
 
     for c, g in enumerate(games):
         print("playing game %d" % c)
-        #mutations = []
 
         g = prepare(g)    
-        g = solve(g)
-        print("XXXX",g)
+        g = solve(c, g)
+        #show(solved_games[c])
+        print(">>>>",solved_games[c])
+        add = (solved_games[c][0][0].pop() * 100 + solved_games[c][0][1].pop() * 10 + solved_games[c][0][2].pop())
+        solution += add
+        print("PPPPP", add)
+        #print("GGGG-->",g)
         print("DEBUG: done with solving: %d"% c)
-        show(g)
 
+        #if g == None:
+        #    pass
+        #else:
+        #    show(g)
+
+    #for c, g in enumerate(solved_games):
+    #   print(c,":",g)
 
 
     #print("Game solved: %d" % c)
-    #print("Solution = %d" % solution)
+    print("Solution = %d" % solution)
 
 
 if __name__ == '__main__':
