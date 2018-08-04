@@ -1,9 +1,11 @@
-#!/usr/bin/env python
+#!/usr/bin/env  python3
 
-""" 
 """
 
-raw_triangle = """
+"""
+
+
+raw = """
 75
 95 64
 17 47 82
@@ -21,40 +23,20 @@ raw_triangle = """
 04 62 98 27 23 09 70 98 73 93 38 53 60 04 23
 """
 
-# len 15 * 2 + 2
 
-def print_triangle(triangle):
-    for line in triangle:
-        print  str(line).center(80, ' ') 
+def main():
 
-triangle = []
-for row in raw_triangle.split("\n"):
-    if row == "":
-        continue
-    triangle.append(map(int,row.split(" ")))
+    pyr = [[ int(e) for e in line.split()] for line in raw.split('\n') if not line == ""]
+    print(pyr)
 
 
-#print triangle
+    for ln in reversed(range(len(pyr)-1)):
+        for x in range(len(pyr[ln])):
+            print("..", ln, x)
+            pyr[ln][x] = pyr[ln][x] + max(pyr[ln + 1][x], pyr[ln + 1][x+1])
 
-print_triangle(triangle)
-
-
-
-while len(triangle) > 1:
-
-    tmp_line = []
-    for e in range(len(triangle[-2])):
-        print "E",e
-        tmp_line.append( triangle[-2][e] + max(triangle[-1][e],triangle[-1][e+1]))
-
-    triangle.pop()
-    triangle.pop()
-    triangle.append(tmp_line)
+    print("Solution = %d" % pyr[0][0])
 
 
-    print_triangle(triangle)
-
-
-
-
-
+if __name__ == '__main__':
+    main()
