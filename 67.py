@@ -28,12 +28,10 @@ def main():
         raw = f.read()
 
     pyr = [[ int(e) for e in line.split()] for line in raw.split('\n') if not line == ""]
-    print(pyr)
 
 
     for ln in reversed(range(len(pyr)-1)):
         for x in range(len(pyr[ln])):
-            print("..", ln, x)
             pyr[ln][x] = pyr[ln][x] + max(pyr[ln + 1][x], pyr[ln + 1][x+1])
 
     print("Solution = %d" % pyr[0][0])
