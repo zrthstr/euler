@@ -4,7 +4,5 @@
     The sum of these multiples is 23. Find the sum of all the multiples of 3 or 5 below 1000."""
 
 
-nums = set(range(5,1000,5) + range(3,1000,3))
-print reduce(lambda x,y: x+y, nums)
-
+print(sum(set(list(range(0, 1000, 3)) + list(range(0, 1000, 5)))))
 
