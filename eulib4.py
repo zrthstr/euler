@@ -38,6 +38,30 @@ def primes_to(maxi):
     return p
 
 
+### fastest so far
+def primes_to2(maxi):
+    maxi = int(maxi)
+
+    if maxi <= 2:
+        return []
+    if maxi == 2:
+        return [2]
+
+    p = [2]
+    for n in range(3,maxi+1, 2):
+        last = int(math.sqrt(n)) + 1
+        for test in p:
+            if test > last:
+                p.append(n)
+                break
+            if n % test == 0:
+                break
+        else:
+            p.append(n)
+    return p
+
+
+
 def primes_count(n):
         return [prime_iterator() for p in range(n)]
             
