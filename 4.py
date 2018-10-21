@@ -39,9 +39,11 @@ def facter_count(facters):
 
 
 facters = [facter(e) for e in range(2,20) ]
+print facters
    
-res =1 
-multiples = [ res * c ** m for c, m in enumerate(facter_count(facters),start=1)]
+multiples = [ c ** m for c, m in enumerate(facter_count(facters),start=1)]
+
+#print multiples
 
 print reduce(lambda x, y: x * y, multiples)
 
