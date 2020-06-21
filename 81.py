@@ -52,6 +52,7 @@ def test_flip():
     print("in:", lines)
     print("flipped:", flip(lines))
     pprint(flipped)
+    return flipped, lines
 
 
 def parse_infile(MATRIX_IN):
@@ -70,16 +71,32 @@ def pprint(lines):
         print("   " * abs(n), line)
 
 
+
+def min_path(lines):
+    # not using flipped for now, the lines way seems simpler in python
+    width = int(len(lines) /2)
+    for y in range(len(lines)):
+        for x in range(len(lines[y])):
+            this = lines[y][x]
+            if x == 0 == y:
+                continue
+            if y == 0:
+                lines[y][x] += lines[y][x-1]
+            elif x == 0:
+                lines[y][x] += lines[y-1][x]
+            else:
+                lines[y][x] += min(lines[y][x-1],lines[y-1][x])
+
+    print("solution:", lines[len(lines)-1][len(lines)-1])
+
+    return lines
+
+
 def main():
     #print("a North-East grid at 80x80 has %d paths" % calulate_number_of_path(80))
-    test_flip()
-    #lines = parse_infile(MATRIX_IN)
-    #print(lines)
-    #lines = flip(lines)
-    #print(lines)
-    #pprint(lines)
-    #min_path(lines)
-
+    #flipped, lines = test_flip()
+    lines = parse_infile(MATRIX_IN)
+    lines = min_path(lines)
 
 if __name__ == '__main__':
     main()
