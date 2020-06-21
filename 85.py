@@ -15,38 +15,42 @@ Although there exists no rectangular grid that contains exactly two million rect
 def rec_count(xx,yy):
     xx += 1
     yy += 1
-    a = 0
-    for x in range(1,xx+1):
-        for y in range(1, yy+1):
-            a+=(xx+1-x) * (yy+1-y)
-            print(a)
-    return a
+    return sum([(xx-x)*(yy-y) for x in range(1,xx) for y in range(1,yy)])
 
 result = dict()
 
-MAXXY = 3 ## something below 1m ...
-MAXSQ = 1000 # should be 2M
+MAXXY = 2000 ## calculated with rec_count()
+MAXSQ = 2*1e6
 
-def interate():
-    for y in range(MAXXY,1):
-        for x in range(MAXXY,1):
+def walk():
+    for y in range(1,MAXXY):
+        for x in range(1,MAXXY):
             if x > y:
-                x, y = y, x
-            key = str(y) + 'x' + str(x)
-            if not key in result:
-                count = rec_count(y, x)
-                result[key] = count
-            if count > 20000000:
                 break
-                if x == 1:
-                    return
+            key = str(y) + 'x' + str(x)
+            count = rec_count(y, x)
+            result[key] = count
+            print(key, count)
+            if x == 1 and count > MAXSQ:
+                return
+            if count > MAXSQ:
+                break
+
+def find_top():
+    best_dist = MAXSQ
+    best_dist_area = 0
+    for k,v in result.items():
+        x, y = [int(this) for this in k.split('x')]
+        dist = abs(MAXSQ-v)
+        if dist < best_dist:
+            best_dist = dist
+            best_dist_area = x * y
+
+    print(best_dist_area)
 
 def main():
-    #iterate()
-    #find_top()
-    test = rec_count(2,3)
-    print(test)
-
+    walk()
+    find_top()
 
 if __name__ == '__main__':
     main()
