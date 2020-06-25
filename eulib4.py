@@ -16,7 +16,6 @@ def prime_gen():
         else:
             p.append(cur)
             yield p[-1]
-    
         cur += 2
 
 
@@ -64,7 +63,7 @@ def primes_to2(maxi):
 
 def primes_count(n):
         return [prime_iterator() for p in range(n)]
-            
+
 
 def factors(i):
     if i < 2:
@@ -75,7 +74,6 @@ def factors(i):
 
     if i in primes:
         return [i]
-    
     while i not in primes:
         for test in primes: #sqrt(i)
             if i % test == 0: 

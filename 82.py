@@ -17,13 +17,10 @@ import copy
 MATRIX_IN = "p082_matrix.txt"
 
 def parse_infile(MATRIX_IN):
+    lines = []
     with open(MATRIX_IN) as f:
-        lines = f.read().split("\n")
-        for n, line in enumerate(lines):
-            if line == '':
-                del(lines[n])
-                continue
-            lines[n] = [int(i) for i in line.split(",")]
+        for l in f.read().splitlines():
+            lines.append([int(i) for i in l.split(",")])
     return lines
 
 
