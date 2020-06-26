@@ -19,7 +19,7 @@ MATRIX_IN = "p082_matrix.txt"
 def parse_infile(MATRIX_IN):
     lines = []
     with open(MATRIX_IN) as f:
-        for l in f.read().splitlines():
+        for l in f:
             lines.append([int(i) for i in l.split(",")])
     return lines
 
