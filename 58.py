@@ -19,17 +19,26 @@ If one complete new layer is wrapped around the spiral above, a square spiral wi
 
 """
 
+import sys
+import eulib4
 
-def add_round(spiral)
 
-    return spiral
+ppool = set(eulib4.primes_to(100000))
 
 def main():
-    spiral = [[1,2]]
-    spiral = add_round(spiral)
-    #solution = 0
-    #print("Solution = %d" % solution)
-
+    spiral = 1
+    print(spiral)
+    for e in range(2,sys.maxsize,2):
+        for f in range(4):
+            spiral += e
+            if spiral in ppool:
+                print("prime: ", spiral)
+        slen = e + 1
+        ratio = pcount  .........
+        print("slen: {slen}, head: {spiral}, ratio {}")
+        if ratio < 0.10:
+            print("solution: {slen}")
+            break
 
 if __name__ == '__main__':
     main()
