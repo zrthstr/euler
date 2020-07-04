@@ -23,21 +23,29 @@ import sys
 import eulib4
 
 
-ppool = set(eulib4.primes_to(100000))
+ppool = set(eulib4.primes_to(4000000))
+
 
 def main():
+    print(".")
     spiral = 1
+    is_prime = 0
+    corners = 1
+
     print(spiral)
     for e in range(2,sys.maxsize,2):
         for f in range(4):
+            corners += 1
             spiral += e
             if spiral in ppool:
-                print("prime: ", spiral)
+                is_prime += 1
+                #print("prime: ", spiral)
+
         slen = e + 1
-        ratio = pcount  .........
-        print("slen: {slen}, head: {spiral}, ratio {}")
-        if ratio < 0.10:
-            print("solution: {slen}")
+        ratio = is_prime / corners
+        print(f"corners: {corners}, is_prime: {is_prime}, ratio {ratio}, spiral: {spiral} slen: {slen}")
+        if ratio < 0.1:
+            print(f"solution: {slen}")
             break
 
 if __name__ == '__main__':
