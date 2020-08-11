@@ -1,1 +1,1 @@
-Solutions to projecteuler.net
+### Solutions to http://projecteuler.net
