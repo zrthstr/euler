@@ -1,2 +1,2 @@
 ### Solutions to http://projecteuler.net
-progress: projecteuler.net/profile/zrth.xml
+progress: http://projecteuler.net/profile/zrth.xml
