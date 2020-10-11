@@ -20,13 +20,38 @@ Find the value of d < 1000 for which 1/d contains the longest recurring cycle in
 
 """
 
-def rec_cycle_len(n):
-    div = str(int(str(1 / n)[2:]))
-    for d in len(div)-1:
-        if div in div:
+def rec_cycle_len(e):
+    seen = set()
 
-    rem = ""
-    return len(rem)
+    print("_" * 10)
+    print(e)
+    print("should:" ,1/e)
+    last = 1
+    result = "0."
+    while True:
+        last *= 10
+        if last < e:
+            #print("times 10")
+            #last *= 10
+            result += "0"
+            continue
+
+        q, last = divmod(last, e)
+        result += str(q)
+        if last in seen:
+            break
+        seen.add(last)
+        if last == 0:
+            break
+
+        #last *= 10
+
+    print("seen:",len(seen))
+    return result, len(seen)
+
+            
+
+        
 
 
 def main():
@@ -34,10 +59,11 @@ def main():
     longest = 0
 
     for e in range(2, 1000):
-        clen = rec_cycle_len(e)
+        clen, seen = rec_cycle_len(e)
         print(clen)
-        if clen > longest:
-            longest = clen
+        print()
+        if seen > longest:
+            longest = seen
             solution = e
 
     print("Solution = %d" % solution)
