@@ -40,11 +40,11 @@ def rec_cycle_len(e):
         if last == 0:
             break
 
-    return [len(seen), result]
+    return [len(seen), result, e]
 
 
 def main():
-    print(max(rec_cycle_len(e) for e in range(2,1000))[0])
+    print(max(rec_cycle_len(e) for e in range(2,1000))[2])
 
 
 if __name__ == '__main__':
