@@ -11,8 +11,8 @@ found = [2]
 def smallest_prime(i):
     for n in found:
         if n ** 2 > i:
-            found.append(i) 
-            return i  
+            found.append(i)
+            return i
         if not i % n:
             return n
 

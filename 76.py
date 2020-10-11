@@ -31,17 +31,17 @@ def test():
 
 
 def calc(n, load):
-    if n == 0:
-        return load
+    n -= 1
+    if n < 1:
+        return
     print(n)
-    #for n in range(0, n+1):
-    load = calc(n-1)
-    if load == 100:
-        print(".")
+    for n in range(0, n+1):
+        calc(n, load)
 
 def main():
     #test()
-    calc(99,0)
+    #calc(99,0)
+    calc(5,[])
 
 
 

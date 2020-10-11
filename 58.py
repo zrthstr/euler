@@ -23,7 +23,7 @@ import sys
 import eulib4
 
 
-ppool = set(eulib4.primes_to(4000000))
+ppool = set(eulib4.primes_to(16000000))
 
 
 def main():
