@@ -34,11 +34,10 @@ def rec_cycle_len(e):
         q, last = divmod(last, e)
         result += str(q)
 
-        if last in seen:
+        if last in seen or not last:
             break
+
         seen.add(last)
-        if last == 0:
-            break
 
     return [len(seen), result, e]
 
