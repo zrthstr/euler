@@ -16,6 +16,8 @@ How many different ways can one hundred be written as a sum of at least two posi
 
 """
 
+""" must use partition numbers"""
+
 def test():
     ## solve for 5 ##
     v4 = 4
@@ -30,18 +32,30 @@ def test():
                         print(f"v4:{n4} v3:{n3} v2:{n2} v1:{v1}")
 
 
-def calc(n, load):
-    n -= 1
-    if n < 1:
-        return
-    print(n)
-    for n in range(0, n+1):
-        calc(n, load)
+
+def step(start, summe, trace, end=100):
+    print(f"start: {start} summe: {summe} end: {end} trace: {trace}")
+    for e in range(start, end):
+        summe += e
+        trace.append(e)
+        if summe >= end:
+            if summe == end:
+                print(f"trace: {trace}")
+            break
+        step(start,summe,trace[:],end)
 
 def main():
     #test()
-    #calc(99,0)
-    calc(5,[])
+    #calc(99,[])
+    #calc(9,[])
+    trace = []
+
+    start = 1
+    summe = 0
+    upto = 5
+    step(start, summe, trace[:], end=upto)
+    summe = 0
+
 
 
 
