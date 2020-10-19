@@ -16,47 +16,78 @@ How many different ways can one hundred be written as a sum of at least two posi
 
 """
 
-""" must use partition numbers"""
+"""
+6
+5 + 1
+4 + 2
+4 + 1 + 1
+3 + 3
+3 + 2 + 1
+3 + 1 + 1 + 1
+2 + 2 + 2
+2 + 2 + 1 + 1
+2 + 1 + 1 + 1 + 1
+1 + 1 + 1 + 1 + 1 + 1
+"""
 
-def test():
-    ## solve for 5 ##
-    v4 = 4
-    for n4 in range(0, 2):
-        v3 = 3
-        for n3 in range(0, 2):
-            v2 = 2
-            for n2 in range(0, 3):
-                v1 = 1
-                for n1 in range(0,6):
-                    if v4 * n4 + v3 * n3 + n2 * v2 + v1 * n1 == 5:
-                        print(f"v4:{n4} v3:{n3} v2:{n2} v1:{v1}")
+"""
+7
+6 + 1
+5 + 2
+4 + 3
+4 + 2 + 1
+4 + 1 + 1 + 1
+3 + 3 + 1
+3 + 2 + 2 + 1
+3 + 2 + 1 + 1 + 1
+3 + 1 + 1 + 1 + 1 + 1
+2 + 2 + 2 + 2 + 1
+2 + 2 + 2 + 1 + 1 + 1
+2 + 2 + 1 + 1 + 1 + 1 + 1
+2 + 1 + 1 + 1 + 1 + 1 + 1 + 1
+1 + 1 + 1 + 1 + 1 + 1 + 1 + 1 + 1
+etc
+"""
+
+
+def mutate(this):
+    print()
+    print(f"got {this}")
+    for i, n in enumerate(this):
+        #if n:
+        if n == 1:
+            continue
+        print(f"looking at {this[i]} ") ## {n}")
+
+        this[i] = this[i]-1
+
+        rest = start - sum(this[i:])
+        #rest = start
+        t, r = divmod(rest, this[i])
+        if r == 0:
+            add = [rest] * t
+        else:
+            add = [rest] * t + [r]
+
+        print(f"t:{t}, r:{r}, this[i]:{this[i]}, rest:{rest} add:{add}")
+        return add + this[i:]
 
 
 
-def step(start, summe, trace, end=100):
-    print(f"start: {start} summe: {summe} end: {end} trace: {trace}")
-    for e in range(start, end):
-        summe += e
-        trace.append(e)
-        if summe >= end:
-            if summe == end:
-                print(f"trace: {trace}")
-            break
-        step(start,summe,trace[:],end)
 
 def main():
-    #test()
-    #calc(99,[])
-    #calc(9,[])
-    trace = []
+    """ for simplicity reason lets run this form right to left,
+        flipped compared to above"""
 
-    start = 1
-    summe = 0
-    upto = 5
-    step(start, summe, trace[:], end=upto)
-    summe = 0
+    global start
+    start = 6
+    start = 5
+    this = [start]
 
-
+    print(this)
+    while not set(this) == {1}:
+        this = mutate(this)
+        print(this)
 
 
 if __name__ == '__main__':
