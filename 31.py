@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+### see 76 for a clean solution ###
+
 """
 calculate the combinationbs that 200p can be combined with
 1p, 2p, 5p, 10p, 20p, 50p, £1 (100p) and £2 (200p).
